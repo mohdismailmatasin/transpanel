@@ -1,0 +1,16 @@
+{
+  "section-general": {
+    "type": "section",
+    "description": "General"
+  },
+  "always-transparent": {
+    "type": "switch",
+    "default": true,
+    "description": "Always make panels transparent (On/Off)"
+  },
+  "first-launch": {
+    "type": "bool",
+    "default": true,
+    "description": "First launch flag"
+  }
+}

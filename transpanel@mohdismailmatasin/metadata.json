@@ -1,0 +1,21 @@
+{
+    "name": "Transpanel",
+    "version": "4.1.0",
+    "description": "Make your Cinnamon panels always transparent. Simple, modern, and compatible with Cinnamon 6.4.10.",
+    "url": "https://github.com/mohdismailmatasin/cinnamon-transpanel",
+    "website": "https://github.com/mohdismailmatasin/cinnamon-transpanel",
+    "cinnamon-version": [
+        "3.2",
+        "3.4",
+        "3.6",
+        "3.8",
+        "4.0",
+        "4.2",
+        "4.3",
+        "4.4",
+        "4.6"
+    ],
+    "uuid": "transpanel@mohdismailmatasin",
+    "author": "Mohd Ismail Mat Asin",
+    "last-edited": 1747420800
+}
