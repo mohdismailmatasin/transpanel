@@ -45,12 +45,12 @@ Transpanel is a simple, modern Cinnamon desktop extension that makes all your pa
 
 - Open System Settings → Extensions
 
-![extension](extension.png)
+![alt text](images/extension.png)
 
 - Find "Transpanel" and click the gear icon to open settings
 - Use the On/Off switch to enable or disable panel transparency
 
-![enabling](enable.png)
+![alt text](images/enable.png)
 
 ## Compatibility
 
