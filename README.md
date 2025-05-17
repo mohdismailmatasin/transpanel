@@ -26,17 +26,23 @@ Transpanel is a simple, modern Cinnamon desktop extension that makes all your pa
    git clone https://github.com/mohdismailmatasin/transpanel.git
    ```
 
+2. Copy the folder (transpanel@mohdismailmatasin) to your Cinnamon extensions directory:
+
    ```sh
    cp transpanel ~/.local/share/cinnamon/extensions
    ```
+
+3. Remove unused directory.
 
    ```sh
    rm -r transpanel
    ```
 
-2. Copy the folder (transpanel@mohdismailmatasin) to your Cinnamon extensions directory:
-3. Restart Cinnamon (press Alt+F2, type `r`, and press Enter) or log out and back in.
-4. Enable "Transpanel" in System Settings → Extensions.
+4. Restart Cinnamon (press Alt+F2, type `r`, and press Enter) or log out and back in.
+5. Enable "Transpanel" in System Settings → Extensions.
+
+![extension](extension.png)
+![enabling](enable.png)
 
 ## Usage
 
