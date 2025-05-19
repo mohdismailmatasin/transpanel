@@ -63,10 +63,6 @@ Transpanel is a simple, modern Cinnamon desktop extension that makes all your pa
 - Restart Cinnamon after installation
 - For issues, check the [GitHub Issues](https://github.com/mohdismailmatasin/transpanel/issues) page
 
-## License
-
-Transpanel is free software, licensed under the GNU GPL v3. See LICENSE for details.
-
 ---
 
 **Author:** Mohd Ismail Mat Asin  
