@@ -79,15 +79,21 @@ MaximizedPolicy.prototype = {
     },
 
     disable: function () {
-        this._signals.disconnectAllSignals();
-        this._signals = null;
+        try {
+            if (this._signals) {
+                this._signals.disconnectAllSignals();
+                this._signals = null;
+            }
 
-        if (this._startup_signals) {
-            this._startup_signals.disconnectAllSignals();
-            this._startup_signals = null;
+            if (this._startup_signals) {
+                this._startup_signals.disconnectAllSignals();
+                this._startup_signals = null;
+            }
+
+            this.controller = null;
+        } catch (err) {
+            global.logError("Error disabling MaximizedPolicy: " + err);
         }
-
-        this.controller = null;
     },
 
     is_transparent: function (panel) {

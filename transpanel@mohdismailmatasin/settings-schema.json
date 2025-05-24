@@ -12,5 +12,65 @@
     "type": "bool",
     "default": true,
     "description": "First launch flag"
+  },
+  "section-opacity": {
+    "type": "section",
+    "description": "Panel Opacity Settings"
+  },
+  "opacity-description": {
+    "type": "description",
+    "description": "Adjust the opacity for each panel individually. 0% = fully transparent, 100% = fully opaque."
+  },
+  "panel-top-opacity": {
+    "type": "scale",
+    "default": 0,
+    "min": 0,
+    "max": 100,
+    "step": 5,
+    "description": "Top panel opacity (%)"
+  },
+  "panel-bottom-opacity": {
+    "type": "scale",
+    "default": 0,
+    "min": 0,
+    "max": 100,
+    "step": 5,
+    "description": "Bottom panel opacity (%)"
+  },
+  "panel-left-opacity": {
+    "type": "scale",
+    "default": 0,
+    "min": 0,
+    "max": 100,
+    "step": 5,
+    "description": "Left panel opacity (%)"
+  },
+  "panel-right-opacity": {
+    "type": "scale",
+    "default": 0,
+    "min": 0,
+    "max": 100,
+    "step": 5,
+    "description": "Right panel opacity (%)"
+  },
+  "section-advanced": {
+    "type": "section",
+    "description": "Advanced Settings"
+  },
+  "maximized-opacity": {
+    "type": "scale",
+    "default": 80,
+    "min": 0,
+    "max": 100,
+    "step": 5,
+    "description": "Panel opacity when window is maximized (%)"
+  },
+  "animation-duration": {
+    "type": "scale",
+    "default": 200,
+    "min": 0,
+    "max": 1000,
+    "step": 50,
+    "description": "Animation duration (ms)"
   }
 }

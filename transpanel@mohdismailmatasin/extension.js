@@ -36,7 +36,7 @@ if (typeof require !== 'undefined') {
     Policies = Self.policies;
 }
 
-const ANIMATIONS_DURATION = 200;
+const DEFAULT_ANIMATIONS_DURATION = 200;
 const DEFAULT_PANEL_COLOR = {
     red: 0,
     green: 0,
@@ -71,13 +71,21 @@ MyExtension.prototype = {
         this.alwaysTransparent = this.settings.getValue("always-transparent");
         this.on_settings_changed = this.on_settings_changed.bind(this);
         this.settings.bind("always-transparent", "alwaysTransparent", this.on_settings_changed);
+        this.settings.bind("panel-top-opacity", "panelTopOpacity", this.on_settings_changed);
+        this.settings.bind("panel-bottom-opacity", "panelBottomOpacity", this.on_settings_changed);
+        this.settings.bind("panel-left-opacity", "panelLeftOpacity", this.on_settings_changed);
+        this.settings.bind("panel-right-opacity", "panelRightOpacity", this.on_settings_changed);
+        this.settings.bind("maximized-opacity", "maximizedOpacity", this.on_settings_changed);
+        this.settings.bind("animation-duration", "animationDuration", this.on_settings_changed);
         this._classname = TRANSPARENT_THEME;
         Gettext.bindtextdomain(meta.uuid, GLib.get_home_dir() + "/.local/share/locale");
     },
 
     enable: function () {
         this.policy.enable();
-        Main.getPanels().forEach(panel => this.make_transparent(panel, true));
+        Main.getPanels().forEach(panel => {
+            this._update_panel_opacity(panel);
+        });
         if (this.settings.getValue("first-launch")) {
             this.settings.setValue("first-launch", false);
             this._show_startup_notification();
@@ -85,23 +93,83 @@ MyExtension.prototype = {
     },
 
     disable: function () {
-        this.policy.disable();
-        this.settings.finalize();
-        this.settings = null;
-        Main.getPanels().forEach(panel => this.make_transparent(panel, false));
+        try {
+            if (this.policy) {
+                this.policy.disable();
+            }
+            if (this.settings) {
+                this.settings.finalize();
+                this.settings = null;
+            }
+            Main.getPanels().forEach(panel => this._reset_panel_opacity(panel));
+        } catch (err) {
+            global.logError("Error disabling Transpanel extension: " + err);
+        }
+    },
+
+    _reset_panel_opacity: function (panel) {
+        try {
+            if (panel && panel.actor) {
+                panel.actor.remove_style_class_name(this._classname);
+                this._set_background_opacity(panel, 255); // Fully opaque
+                let idx = typeof panel.panelId === 'number' ? panel.panelId - 1 : 0;
+                if (idx >= 0 && idx < this._panel_status.length) {
+                    this._panel_status[idx] = false;
+                }
+            }
+        } catch (err) {
+            global.logError("Error resetting panel opacity: " + err);
+        }
     },
 
     on_state_change: function (monitor) {
         Main.getPanels().forEach(panel => {
-            this.make_transparent(panel, this.alwaysTransparent);
+            this._update_panel_opacity(panel);
         });
     },
 
+    _update_panel_opacity: function (panel) {
+        try {
+            if (panel && panel.actor) {
+                panel.actor.add_style_class_name(this._classname);
+                let opacity = this._get_panel_opacity(panel);
+                this._set_background_opacity(panel, opacity);
+                let idx = typeof panel.panelId === 'number' ? panel.panelId - 1 : 0;
+                if (idx >= 0 && idx < this._panel_status.length) {
+                    this._panel_status[idx] = opacity < 255;
+                }
+            }
+        } catch (err) {
+            global.logError("Error updating panel opacity: " + err);
+        }
+    },
+
+    _get_panel_opacity: function (panel) {
+        let opacityPercent = this._get_panel_opacity_setting(panel);
+
+        // If always transparent is disabled and there's a maximized window, use maximized opacity
+        if (!this.alwaysTransparent && !this.policy.is_transparent(panel)) {
+            opacityPercent = this.maximizedOpacity || 80;
+        }
+
+        // Convert percentage (0-100) to alpha value (0-255)
+        return Math.round((opacityPercent / 100) * 255);
+    },
+
+    _get_panel_opacity_setting: function (panel) {
+        // panel.panelPosition: 0=top, 1=bottom, 2=left, 3=right
+        switch(panel.panelPosition) {
+            case 0: return this.panelTopOpacity || 0;
+            case 1: return this.panelBottomOpacity || 0;
+            case 2: return this.panelLeftOpacity || 0;
+            case 3: return this.panelRightOpacity || 0;
+            default: return 0;
+        }
+    },
+
     make_transparent: function (panel, transparent) {
-        panel.actor.add_style_class_name(this._classname);
-        this._set_background_opacity(panel, transparent ? 0 : 255);
-        let idx = typeof panel.panelId === 'number' ? panel.panelId - 1 : 0;
-        this._panel_status[idx] = transparent;
+        // Legacy function for backward compatibility
+        this._update_panel_opacity(panel);
     },
 
     _set_background_opacity: function (panel, alpha) {
@@ -113,14 +181,16 @@ MyExtension.prototype = {
         color.blue = DEFAULT_PANEL_COLOR.blue;
         color.alpha = alpha;
         actor.save_easing_state();
-        actor.set_easing_duration(ANIMATIONS_DURATION);
+        actor.set_easing_duration(this.animationDuration || DEFAULT_ANIMATIONS_DURATION);
         actor.set_background_color(color);
         actor.restore_easing_state();
     },
 
     on_settings_changed: function () {
         this._classname = TRANSPARENT_THEME;
-        Main.getPanels().forEach(panel => this.make_transparent(panel, this.alwaysTransparent));
+        Main.getPanels().forEach(panel => {
+            this._update_panel_opacity(panel);
+        });
         this.on_state_change(-1);
     },
 
@@ -158,16 +228,21 @@ function enable() {
     try {
         extension.enable();
     } catch (err) {
-        extension.disable();
+        global.logError("Transpanel extension enable error: " + err);
+        if (extension) {
+            extension.disable();
+        }
         throw err;
     }
 }
 
 function disable() {
     try {
-        extension.disable();
+        if (extension) {
+            extension.disable();
+        }
     } catch (err) {
-        global.logError(err);
+        global.logError("Transpanel extension disable error: " + err);
     } finally {
         extension = null;
     }
