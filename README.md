@@ -1,4 +1,4 @@
-# Transparent Panels Reloaded
+# Transpanel
 
 A Cinnamon desktop extension that makes your panels transparent with fine-grained opacity control for each panel individually.
 
