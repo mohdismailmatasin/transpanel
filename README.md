@@ -1,4 +1,4 @@
-# Transpanel
+# Transparent Panels Reloaded
 
 A Cinnamon desktop extension that makes your panels transparent with fine-grained opacity control for each panel individually.
 
@@ -15,6 +15,13 @@ A Cinnamon desktop extension that makes your panels transparent with fine-graine
 - **Maximized window opacity**: Different opacity when windows are maximized
 - **Always transparent mode**: Override window detection behavior
 - **Per-monitor support**: Works correctly with multiple monitors
+
+### 🎨 Color Customization
+
+- **Custom panel colors**: Choose individual colors for each panel (top, bottom, left, right)
+- **Global color setting**: Set a default color that applies to all panels
+- **Smart color fallback**: Panel-specific colors automatically fall back to global color when not customized
+- **Easy toggle**: Enable/disable custom colors with a simple switch
 
 ### ⚡ Advanced Settings
 
@@ -44,6 +51,15 @@ A Cinnamon desktop extension that makes your panels transparent with fine-graine
 - **Bottom Panel Opacity**: 0-100% (default: 0%)
 - **Left Panel Opacity**: 0-100% (default: 0%)
 - **Right Panel Opacity**: 0-100% (default: 0%)
+
+### Panel Color Settings
+
+- **Use Custom Colors**: Enable/disable custom panel colors (default: disabled)
+- **Global Panel Color**: Default color for all panels (default: black)
+- **Top Panel Color**: Custom color for top panel (falls back to global if not set)
+- **Bottom Panel Color**: Custom color for bottom panel (falls back to global if not set)
+- **Left Panel Color**: Custom color for left panel (falls back to global if not set)
+- **Right Panel Color**: Custom color for right panel (falls back to global if not set)
 
 ### Advanced Settings
 
@@ -76,6 +92,14 @@ A Cinnamon desktop extension that makes your panels transparent with fine-graine
 - Left panel: 25% (app launcher)
 - Right panel: 75% (system controls)
 
+### Scenario 5: Colorful Panels
+
+- Enable custom colors
+- Set global color to dark blue for a modern look
+- Top panel: Custom red color with 30% opacity
+- Bottom panel: Custom green color with 20% opacity
+- Side panels: Use global blue color with 15% opacity
+
 ## Troubleshooting
 
 ### Panels Not Changing Opacity
@@ -98,7 +122,7 @@ A Cinnamon desktop extension that makes your panels transparent with fine-graine
 
 ## License
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+[MIT](LICENSE)
 
 ## Credits
 
@@ -108,4 +132,4 @@ This program is free software: you can redistribute it and/or modify it under th
 
 ---
 
-**Author:** [Mohd Ismail Mat Asin](https://github.com/mohdismailmatasin)
+**Author:** Mohd Ismail Mat Asin

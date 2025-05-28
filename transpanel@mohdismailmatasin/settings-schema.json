@@ -53,6 +53,49 @@
     "step": 5,
     "description": "Right panel opacity (%)"
   },
+  "section-colors": {
+    "type": "section",
+    "description": "Panel Color Settings"
+  },
+  "use-custom-colors": {
+    "type": "switch",
+    "default": false,
+    "description": "Use custom panel colors"
+  },
+  "color-description": {
+    "type": "description",
+    "description": "Customize the color of each panel individually. When disabled, panels will use the default black color."
+  },
+  "global-panel-color": {
+    "type": "colorchooser",
+    "default": "rgba(0,0,0,1.0)",
+    "description": "Global panel color (applies to all panels when individual colors are not set)",
+    "dependency": "use-custom-colors"
+  },
+  "panel-top-color": {
+    "type": "colorchooser",
+    "default": "rgba(0,0,0,1.0)",
+    "description": "Top panel color (leave as default to use global color)",
+    "dependency": "use-custom-colors"
+  },
+  "panel-bottom-color": {
+    "type": "colorchooser",
+    "default": "rgba(0,0,0,1.0)",
+    "description": "Bottom panel color (leave as default to use global color)",
+    "dependency": "use-custom-colors"
+  },
+  "panel-left-color": {
+    "type": "colorchooser",
+    "default": "rgba(0,0,0,1.0)",
+    "description": "Left panel color (leave as default to use global color)",
+    "dependency": "use-custom-colors"
+  },
+  "panel-right-color": {
+    "type": "colorchooser",
+    "default": "rgba(0,0,0,1.0)",
+    "description": "Right panel color (leave as default to use global color)",
+    "dependency": "use-custom-colors"
+  },
   "section-advanced": {
     "type": "section",
     "description": "Advanced Settings"

@@ -77,6 +77,12 @@ MyExtension.prototype = {
         this.settings.bind("panel-right-opacity", "panelRightOpacity", this.on_settings_changed);
         this.settings.bind("maximized-opacity", "maximizedOpacity", this.on_settings_changed);
         this.settings.bind("animation-duration", "animationDuration", this.on_settings_changed);
+        this.settings.bind("use-custom-colors", "useCustomColors", this.on_settings_changed);
+        this.settings.bind("global-panel-color", "globalPanelColor", this.on_settings_changed);
+        this.settings.bind("panel-top-color", "panelTopColor", this.on_settings_changed);
+        this.settings.bind("panel-bottom-color", "panelBottomColor", this.on_settings_changed);
+        this.settings.bind("panel-left-color", "panelLeftColor", this.on_settings_changed);
+        this.settings.bind("panel-right-color", "panelRightColor", this.on_settings_changed);
         this._classname = TRANSPARENT_THEME;
         Gettext.bindtextdomain(meta.uuid, GLib.get_home_dir() + "/.local/share/locale");
     },
@@ -111,7 +117,14 @@ MyExtension.prototype = {
         try {
             if (panel && panel.actor) {
                 panel.actor.remove_style_class_name(this._classname);
-                this._set_background_opacity(panel, 255); // Fully opaque
+                // Reset to default color and full opacity
+                let actor = panel.actor;
+                let color = actor.get_background_color();
+                color.red = DEFAULT_PANEL_COLOR.red;
+                color.green = DEFAULT_PANEL_COLOR.green;
+                color.blue = DEFAULT_PANEL_COLOR.blue;
+                color.alpha = 255; // Fully opaque
+                actor.set_background_color(color);
                 let idx = typeof panel.panelId === 'number' ? panel.panelId - 1 : 0;
                 if (idx >= 0 && idx < this._panel_status.length) {
                     this._panel_status[idx] = false;
@@ -172,13 +185,70 @@ MyExtension.prototype = {
         this._update_panel_opacity(panel);
     },
 
+    _parse_color_string: function (colorString) {
+        // Parse rgba(r,g,b,a) or rgb(r,g,b) color strings
+        if (!colorString || typeof colorString !== 'string') {
+            return DEFAULT_PANEL_COLOR;
+        }
+
+        // Remove spaces and convert to lowercase
+        colorString = colorString.replace(/\s/g, '').toLowerCase();
+
+        // Match rgba(r,g,b,a) or rgb(r,g,b) patterns
+        let rgbaMatch = colorString.match(/rgba?\((\d+),(\d+),(\d+)(?:,([0-9.]+))?\)/);
+        if (rgbaMatch) {
+            return {
+                red: parseInt(rgbaMatch[1]) || 0,
+                green: parseInt(rgbaMatch[2]) || 0,
+                blue: parseInt(rgbaMatch[3]) || 0
+            };
+        }
+
+        // Fallback to default color
+        return DEFAULT_PANEL_COLOR;
+    },
+
+    _get_panel_color: function (panel) {
+        // If custom colors are disabled, use default color
+        if (!this.useCustomColors) {
+            return DEFAULT_PANEL_COLOR;
+        }
+
+        let colorString;
+        // Get panel-specific color based on position
+        switch(panel.panelPosition) {
+            case 0: // top
+                colorString = this.panelTopColor;
+                break;
+            case 1: // bottom
+                colorString = this.panelBottomColor;
+                break;
+            case 2: // left
+                colorString = this.panelLeftColor;
+                break;
+            case 3: // right
+                colorString = this.panelRightColor;
+                break;
+            default:
+                colorString = this.globalPanelColor;
+        }
+
+        // If panel-specific color is the default black, use global color
+        if (colorString === "rgba(0,0,0,1.0)" && this.globalPanelColor !== "rgba(0,0,0,1.0)") {
+            colorString = this.globalPanelColor;
+        }
+
+        return this._parse_color_string(colorString);
+    },
+
     _set_background_opacity: function (panel, alpha) {
         let actor = panel.actor;
         let color = actor.get_background_color();
+        let panelColor = this._get_panel_color(panel);
 
-        color.red = DEFAULT_PANEL_COLOR.red;
-        color.green = DEFAULT_PANEL_COLOR.green;
-        color.blue = DEFAULT_PANEL_COLOR.blue;
+        color.red = panelColor.red;
+        color.green = panelColor.green;
+        color.blue = panelColor.blue;
         color.alpha = alpha;
         actor.save_easing_state();
         actor.set_easing_duration(this.animationDuration || DEFAULT_ANIMATIONS_DURATION);
