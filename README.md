@@ -2,6 +2,9 @@
 
 A Cinnamon desktop extension that makes your panels transparent with fine-grained opacity control for each panel individually.
 
+![alt text](sample/transpanel.png)
+![alt text](sample/transpanel2.png)
+
 ## Features
 
 ### 🎛️ Individual Panel Opacity Control
