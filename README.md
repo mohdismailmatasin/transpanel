@@ -125,7 +125,7 @@ A Cinnamon desktop extension that makes your panels transparent with fine-graine
 
 ## License
 
-[MIT](LICENSE)
+[MIT](transpanel@mohdismailmatasin/LICENSE)
 
 ## Credits
 
